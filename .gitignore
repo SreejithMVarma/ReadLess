@@ -1,0 +1,9 @@
+# Ignore environment files
+.env
+
+# Ignore specific Python files
+main.py
+main1.py
+
+# Ignore all pickle files
+*.pkl
