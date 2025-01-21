@@ -10,7 +10,7 @@ nltk.download('punkt_tab')
 nltk.download('averaged_perceptron_tagger')
 from streamlit_chat import message
 from langchain.text_splitter import RecursiveCharacterTextSplitter
-from langchain.vectorstores import FAISS
+from langchain_community.vectorstores import FAISS
 from langchain_community.document_loaders import UnstructuredURLLoader
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain.chains import RetrievalQAWithSourcesChain
