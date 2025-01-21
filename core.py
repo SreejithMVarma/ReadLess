@@ -10,10 +10,12 @@ from langchain_community.document_loaders import UnstructuredURLLoader
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain.chains import RetrievalQAWithSourcesChain
 from langchain_huggingface import HuggingFaceEmbeddings
-from dotenv import load_dotenv
+#from dotenv import load_dotenv
+
+GOOGLE_API_KEY = st.secrets["GOOGLE_API_KEY"]
 
 # Load environment variables
-load_dotenv()
+#load_dotenv()
 
 # Initialize Streamlit app
 st.title("Chat-based URL Research Tool")

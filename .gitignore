@@ -7,3 +7,6 @@ main1.py
 
 # Ignore all pickle files
 *.pkl
+
+#api keys
+.streamlit/secrets.toml
