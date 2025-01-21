@@ -1,5 +1,4 @@
-```markdown
-# Chat-based URL Research Tool
+# ReadLess - Chat-based URL Research Tool
 
 A powerful Streamlit application that simplifies research by transforming URLs into insightful and contextual chat interactions. This tool leverages LangChain, FAISS, Hugging Face embeddings, and Google Generative AI for efficient data retrieval and conversational outputs.
 
@@ -9,7 +8,7 @@ A powerful Streamlit application that simplifies research by transforming URLs i
 - **Unstructured Data Parsing**: Handles raw web content and converts it into meaningful chunks.
 - **Embeddings with FAISS**: Efficiently indexes document embeddings for fast retrieval.
 - **Chat Interface**: Query processed data through an intuitive chat interface.
-- **Contextual AI Responses**: Powered by Google's Gemini-1.5 model for relevant and accurate answers.
+- **Contextual AI Responses**: Powered by Google's Gemini for relevant and accurate answers.
 - **Source Attribution**: Provides sources for retrieved answers to ensure reliability.
 
 ---
@@ -26,9 +25,9 @@ A powerful Streamlit application that simplifies research by transforming URLs i
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/your-username/chat-url-research-tool.git
-   cd chat-url-research-tool
-   ```
+   git clone https://github.com/SreejithMVarma/ReadLess.git
+   cd ReadLess
+
 
 2. Install dependencies:
    ```bash
@@ -60,10 +59,10 @@ A powerful Streamlit application that simplifies research by transforming URLs i
 ## File Structure
 
 ```plaintext
-📂 chat-url-research-tool/
-├── app.py                # Main application file
-├── requirements.txt      # Python dependencies
-├── .env.example          # Example environment variables
+📂 ReadLess/
+├── core.py                # Main application file
+├── requirements.txt       # Python dependencies
+├── .env                  # environment variables
 ├── vector_index.pkl      # Saved vector index (auto-generated)
 └── README.md             # Project documentation
 ```
@@ -91,14 +90,6 @@ Contributions are welcome! Please follow these steps:
 4. Push to the branch: `git push origin feature-name`.
 5. Submit a pull request.
 
----
-
-## License
-
-This project is licensed under the **MIT License**. See the [LICENSE](LICENSE) file for details.
-
----
-
 ## Acknowledgements
 
 Special thanks to:
@@ -115,16 +106,10 @@ Special thanks to:
 **Sreejith M Varma**  
 - [Website](https://sreejithmvarma.in)  
 - [LinkedIn](https://www.linkedin.com/in/sreejithmvarma)  
-- [GitHub](https://github.com/your-username)
-
----
-
-## Screenshots
-
-![Chat Interface Screenshot](https://via.placeholder.com/800x400.png?text=Chat+Interface)  
-*The intuitive chat interface with contextual question-answering capabilities.*
+- [GitHub](https://github.com/SreejithMVarma)
 
 ---
 
 ### Happy Researching! 🚀
-```
+
+---
