@@ -3,6 +3,7 @@ langchain
 nltk
 langchain-google-genai
 langchain-huggingface
+langchain-community
 faiss-cpu
 unstructured
 python-dotenv
