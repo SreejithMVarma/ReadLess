@@ -16,12 +16,8 @@ from langchain_community.document_loaders import UnstructuredURLLoader
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain.chains import RetrievalQAWithSourcesChain
 from langchain_huggingface import HuggingFaceEmbeddings
-#from dotenv import load_dotenv
 
 GOOGLE_API_KEY = st.secrets["GOOGLE_API_KEY"]
-
-# Load environment variables
-#load_dotenv()
 
 # Initialize Streamlit app
 st.title("Chat-based URL Research Tool")
@@ -54,24 +50,42 @@ llm = ChatGoogleGenerativeAI(
 # Process URLs
 if process_url_clicked:
     if any(urls):
-        loader = UnstructuredURLLoader(urls=urls)
-        data = loader.load()
-        st.write("Data Loaded.")
+        try:
+            st.sidebar.info("Processing URLs...")
 
-        # Split data into chunks
-        text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
-        docs = text_splitter.split_documents(data)
-        st.write("Data Split into Chunks.")
+            loader = UnstructuredURLLoader(urls=urls)
+            data = loader.load()
+            st.write("Data Loaded.")
+            
+            # Split data into chunks
+            text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
+            docs = text_splitter.split_documents(data)
+            st.write("Data Split into Chunks.")
 
-        # Create embeddings
-        embeddings = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
-        vector_index = FAISS.from_documents(docs, embeddings)
-        st.write("Embeddings Created.")
+            # Create embeddings
+            embeddings = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
+            st.sidebar.info("Embeddings created. Checking dimensionality...")
+            
+            # Check embedding dimensionality
+            embedding_example = embeddings.embed_query("This is a test sentence.")
+            embedding_dim = len(embedding_example)  # Get embedding vector size
+            st.sidebar.info(f"Embedding Dimensionality: {embedding_dim}")
 
-        # Save vector index locally
-        with open(file_path, "wb") as f:
-            pickle.dump(vector_index, f)
-        st.sidebar.success("URLs processed successfully!")
+            # Ensure dimensionality is correct
+            if embedding_dim <= 0:
+                raise ValueError("Embedding dimensionality is invalid!")
+
+            # Create FAISS index
+            vector_index = FAISS.from_documents(docs, embeddings)
+            st.write("Embeddings and FAISS index created successfully.")
+
+            # Save vector index locally
+            with open(file_path, "wb") as f:
+                pickle.dump(vector_index, f)
+            st.sidebar.success("URLs processed successfully!")
+
+        except Exception as e:
+            st.sidebar.error(f"Error while processing URLs: {e}")
     else:
         st.sidebar.error("Please enter valid URLs.")
 
@@ -79,10 +93,8 @@ if process_url_clicked:
 chat_placeholder = st.empty()
 
 with chat_placeholder.container():
-    for i in range(len(st.session_state["past"])):
-        # Display user messages
+    for i in range(len(st.session_state["past"])):  
         message(st.session_state["past"][i], is_user=True, key=f"user_{i}")
-        # Display bot responses
         message(st.session_state["generated"][i], key=f"bot_{i}")
 
 # Input for user query
@@ -94,18 +106,26 @@ if user_query:
     message(user_query, is_user=True, key=f"user_{len(st.session_state['past']) - 1}")
 
     if os.path.exists(file_path):
-        with open(file_path, "rb") as f:
-            vector_index = pickle.load(f)
-        chain = RetrievalQAWithSourcesChain.from_llm(llm=llm, retriever=vector_index.as_retriever())
-        
-        # Process the query and generate the response
-        result = chain.invoke({"question": user_query}, return_only_outputs=True)
-        answer = result["answer"]
-        sources = result.get("sources", "No sources available.")
-        
-        # Store the answer after it's generated
-        st.session_state["generated"].append(f"{answer}\n\nSources:\n{sources}")
+        try:
+            with open(file_path, "rb") as f:
+                vector_index = pickle.load(f)
 
-        # Display the bot's answer
-        message(f"{answer}\n\nSources:\n{sources}")
+            st.sidebar.info("Starting query processing...")
 
+            chain = RetrievalQAWithSourcesChain.from_llm(llm=llm, retriever=vector_index.as_retriever())
+            
+            # Process the query and generate the response
+            result = chain.invoke({"question": user_query}, return_only_outputs=True)
+            answer = result["answer"]
+            sources = result.get("sources", "No sources available.")
+            
+            # Store the answer after it's generated
+            st.session_state["generated"].append(f"{answer}\n\nSources:\n{sources}")
+
+            # Display the bot's answer
+            message(f"{answer}\n\nSources:\n{sources}")
+
+        except Exception as e:
+            st.sidebar.error(f"Error while processing the query: {e}")
+    else:
+        st.sidebar.error("Vector index file not found. Please process URLs first.")
