@@ -8,6 +8,7 @@ import nltk
 nltk.download('punkt')
 nltk.download('punkt_tab')
 nltk.download('averaged_perceptron_tagger')
+nltk.download('averaged_perceptron_tagger_eng')
 from streamlit_chat import message
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_community.vectorstores import FAISS
