@@ -3,6 +3,10 @@ import pickle
 import subprocess
 import sys
 import streamlit as st
+import nltk
+
+nltk.download('punkt')
+nltk.download('averaged_perceptron_tagger')
 from streamlit_chat import message
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.vectorstores import FAISS
