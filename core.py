@@ -4,6 +4,7 @@ import subprocess
 import sys
 import streamlit as st
 import nltk
+import time
 
 nltk.download('punkt')
 nltk.download('punkt_tab')
@@ -17,10 +18,12 @@ from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain.chains import RetrievalQAWithSourcesChain
 from langchain_huggingface import HuggingFaceEmbeddings
 
-GOOGLE_API_KEY = st.secrets["GOOGLE_API_KEY"]
+# API key input
+GOOGLE_API_KEY = st.sidebar.text_input("Enter Google API Key:", type="password")
 
 # Initialize Streamlit app
-st.title("Chat-based URL Research Tool")
+st.title("_READ LESS_")
+st.caption("Chat, search, and save time—no more endless reading!")
 st.sidebar.title("Input URLs")
 
 # Set up session state for chat
@@ -46,43 +49,48 @@ llm = ChatGoogleGenerativeAI(
     max_tokens=500,
     max_retries=2,
 )
+status_container = st.container()
 
 # Process URLs
 if process_url_clicked:
     if any(urls):
         try:
-            st.sidebar.info("Processing URLs...")
+            with status_container.status("Processing URLs...") as status:
+                st.sidebar.info("Processing URLs...")
 
-            loader = UnstructuredURLLoader(urls=urls)
-            data = loader.load()
-            st.write("Data Loaded.")
-            
-            # Split data into chunks
-            text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
-            docs = text_splitter.split_documents(data)
-            st.write("Data Split into Chunks.")
+                loader = UnstructuredURLLoader(urls=urls)
+                data = loader.load()
+                st.write("Data Loaded.")
+                status.update(expanded=True)
+                
+                # Split data into chunks
+                text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
+                docs = text_splitter.split_documents(data)
+                st.write("Data Split into Chunks.")
 
-            # Create embeddings
-            embeddings = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
-            st.sidebar.info("Embeddings created. Checking dimensionality...")
-            
-            # Check embedding dimensionality
-            embedding_example = embeddings.embed_query("This is a test sentence.")
-            embedding_dim = len(embedding_example)  # Get embedding vector size
-            st.sidebar.info(f"Embedding Dimensionality: {embedding_dim}")
+                # Create embeddings
+                embeddings = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
+                st.sidebar.info("Embeddings created. Checking dimensionality...")
+                
+                # Check embedding dimensionality
+                embedding_example = embeddings.embed_query("This is a test sentence.")
+                embedding_dim = len(embedding_example)  # Get embedding vector size
+                #st.sidebar.info(f"Embedding Dimensionality: {embedding_dim}")
 
-            # Ensure dimensionality is correct
-            if embedding_dim <= 0:
-                raise ValueError("Embedding dimensionality is invalid!")
+                # Ensure dimensionality is correct
+                if embedding_dim <= 0:
+                    raise ValueError("Embedding dimensionality is invalid!")
 
-            # Create FAISS index
-            vector_index = FAISS.from_documents(docs, embeddings)
-            st.write("Embeddings and FAISS index created successfully.")
-
-            # Save vector index locally
-            with open(file_path, "wb") as f:
-                pickle.dump(vector_index, f)
-            st.sidebar.success("URLs processed successfully!")
+                # Create FAISS index
+                vector_index = FAISS.from_documents(docs, embeddings)
+                st.write("Embeddings and FAISS index created successfully.")
+                time.sleep(1)
+                status.update(label="Processing complete!", state="complete", expanded=False)
+                
+                # Save vector index locally
+                with open(file_path, "wb") as f:
+                    pickle.dump(vector_index, f)
+                st.sidebar.success("URLs processed successfully!")
 
         except Exception as e:
             st.sidebar.error(f"Error while processing URLs: {e}")
