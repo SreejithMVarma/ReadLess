@@ -1,15 +1,16 @@
-# ReadLess - Chat-based URL Research Tool
 
-A powerful Streamlit application that simplifies research by transforming URLs into insightful and contextual chat interactions. This tool leverages LangChain, FAISS, Hugging Face embeddings, and Google Generative AI for efficient data retrieval and conversational outputs.
+# _READ LESS_ - chat, search, and save time - no more endless reading!
+
+A powerful Streamlit application designed to simplify research by transforming URLs into insightful and contextual chat interactions. This tool leverages LangChain, FAISS, Hugging Face embeddings, Google Generative AI (Gemini 1.5 Flash), and other technologies for efficient data retrieval and conversational outputs.
 
 ## Features
 
-- **Multi-URL Input**: Add up to three URLs for processing simultaneously.
-- **Unstructured Data Parsing**: Handles raw web content and converts it into meaningful chunks.
+- **Multi-URL Input**: Input up to three URLs for processing simultaneously.
+- **Unstructured Data Parsing**: Extracts raw web content and converts it into meaningful chunks.
 - **Embeddings with FAISS**: Efficiently indexes document embeddings for fast retrieval.
-- **Chat Interface**: Query processed data through an intuitive chat interface.
-- **Contextual AI Responses**: Powered by Google's Gemini for relevant and accurate answers.
-- **Source Attribution**: Provides sources for retrieved answers to ensure reliability.
+- **Chat Interface**: Engage with processed data through an intuitive chat interface.
+- **Contextual AI Responses**: Powered by Google's Gemini 1.5 Flash for relevant and accurate answers.
+- **Source Attribution**: Provides sources for the answers to ensure reliability and transparency.
 
 ---
 
@@ -18,7 +19,6 @@ A powerful Streamlit application that simplifies research by transforming URLs i
 ### Prerequisites
 
 - Python 3.8+
-- A Google Generative AI API key
 - Required Python dependencies (see `requirements.txt`)
 
 ### Installation
@@ -27,19 +27,17 @@ A powerful Streamlit application that simplifies research by transforming URLs i
    ```bash
    git clone https://github.com/SreejithMVarma/ReadLess.git
    cd ReadLess
-
+   ```
 
 2. Install dependencies:
    ```bash
    pip install -r requirements.txt
    ```
 
-3. Set up your environment:
-   - Create a `.env` file in the project root.
-   - Add your **Google Generative AI API key**:
-     ```env
-     GOOGLE_API_KEY=your_api_key
-     ```
+### Google API Key (Gemini 1.5 Flash)
+
+1. You must generate a **Google API Key** for Gemini 1.5 Flash.
+2. Once generated, paste your **Google API Key** in the input box provided in the **sidebar** of the application.
 
 ### Usage
 
@@ -50,9 +48,11 @@ A powerful Streamlit application that simplifies research by transforming URLs i
 
 2. Open the app in your browser (default: `http://localhost:8501`).
 
-3. Input URLs in the sidebar and click **Process URLs** to extract data.
+3. In the sidebar, enter your **Google Generative AI API key** for Gemini 1.5 Flash directly (input box available at the top).
 
-4. Start chatting in the interface by asking questions related to the processed content.
+4. Input URLs in the sidebar and click **Process URLs** to extract and process data.
+
+5. Start interacting with the processed content by typing your questions into the chat interface.
 
 ---
 
@@ -60,10 +60,8 @@ A powerful Streamlit application that simplifies research by transforming URLs i
 
 ```plaintext
 📂 ReadLess/
-├── core.py                # Main application file
-├── requirements.txt       # Python dependencies
-├── .env                  # environment variables
-├── vector_index.pkl      # Saved vector index (auto-generated)
+├── core.py               # Core functions and logic
+├── requirements.txt      # Python dependencies
 └── README.md             # Project documentation
 ```
 
@@ -71,24 +69,26 @@ A powerful Streamlit application that simplifies research by transforming URLs i
 
 ## Technologies Used
 
-- **Streamlit**: For interactive web applications
-- **LangChain**: Building conversational AI workflows
-- **FAISS**: Fast and efficient similarity search
-- **Hugging Face Embeddings**: Semantic understanding of text
-- **Google Generative AI**: State-of-the-art conversational AI
+- **Streamlit**: For building interactive web applications
+- **LangChain**: For conversational AI workflows
+- **FAISS**: For fast and efficient similarity search
+- **Hugging Face Embeddings**: For semantic understanding of text
+- **Google Generative AI (Gemini 1.5 Flash)**: For advanced AI-driven responses
 - **Python**: Core programming language
 
 ---
 
 ## Contributing
 
-Contributions are welcome! Please follow these steps:
+Contributions are welcome! To contribute, follow these steps:
 
 1. Fork the repository.
-2. Create a feature branch: `git checkout -b feature-name`.
-3. Commit changes: `git commit -m "Add new feature"`.
-4. Push to the branch: `git push origin feature-name`.
+2. Create a new feature branch: `git checkout -b feature-name`.
+3. Commit your changes: `git commit -m "Add new feature"`.
+4. Push your branch: `git push origin feature-name`.
 5. Submit a pull request.
+
+---
 
 ## Acknowledgements
 
